@@ -1,0 +1,9 @@
+var x1;
+var x2;
+var x3;
+
+Min: 2x1 + 4x3;
+
+st: x1 < 9;
+st: x2 >= 3;
+st x2 >= 0;
