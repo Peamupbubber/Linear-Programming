@@ -5,5 +5,10 @@ public class Main {
         else {
             LP lp =  new LP(args[0]);
         }
+        System.out.println("\n");
+
+        LinearSum ls = new LinearSum();
+        ls.setConstant("(2/3)");
+        System.out.println(ls.getConstant());
     }
 }
