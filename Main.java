@@ -19,6 +19,13 @@ public class Main {
       * So, predefined matrix of 0's, and each constraints constant can be assigned the i value of its entry in the constraint list and the j value of that varible name's index in the array (or use hashmap for speedy lookup: i.e. (x1, x2, x3) -> (1, 2, 3))
       */
 
+    /* Options for parsing txt file:
+     * 
+     * 1. Continue with what I'm doing: going to be less work overall I think, but worse code
+     * 2. Switch to rec dec parser + scanner: more work, java? c? transfer info from c to java? no..
+     * 3. flex and yacc: uhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+     */
+
 
 
 
