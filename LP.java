@@ -17,20 +17,24 @@ class Constraint {
     String op;
 
     public Constraint(String con) {
-        left = new LinearSum();
-        right = new LinearSum();
+        left = null;
+        right = null;
         parseConstraint(con);
     }
 
     private void parseConstraint(String con) {
         String[] items = con.split(" ");
 
+        LinearSum currentNode = left;
+
         for(int i = 0; i < items.length; i++) {
             int j = 0;
             while(j < items[i].length() && constChar(items[i].charAt(j))) {
                 j++;
             }
+            left = new LinearSum(items[i].substring(0, j), items[i].substring(j));
 
+            System.out.println("Item: " + con.substring(0, j));
         }
     }
 
@@ -41,6 +45,7 @@ class Constraint {
 
 public class LP {
     private List<String> variables;
+    private HashMap<String, Integer> var_indicies;
     private List<String> constraints;
     private String objectiveFunction;
 
@@ -86,7 +91,9 @@ public class LP {
     
             while(scanner.hasNext()) {
                 String next = scanner.next();
-                System.out.print(next);
+                //System.out.print(next);
+
+
             }
             scanner.close();
         }

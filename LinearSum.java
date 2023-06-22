@@ -10,8 +10,9 @@ public class LinearSum {
 
     private LinearSum next;
 
-    public LinearSum() {
-
+    public LinearSum(String constant, String variable) {
+        setConstant(constant);
+        this.variable = variable;
     }
 
     //Takes in a string and sets the constant to a float, can be given as "(x/y)", "x.y", or "x"
