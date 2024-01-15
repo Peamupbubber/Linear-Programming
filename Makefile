@@ -1,6 +1,7 @@
 make: Main.java
 	javac Main.java
-run: Main.class
+run: Main.java
+	javac Main.java
 	java Main LP.txt
-clean: *.class
+clean:
 	rm *.class

@@ -10,6 +10,11 @@ public class LinearSum {
 
     private LinearSum next;
 
+    public LinearSum() {
+        setConstant("1");
+        setVaraible("x");
+    }
+
     public LinearSum(String constant, String variable) {
         setConstant(constant);
         this.variable = variable;
