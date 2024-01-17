@@ -8,3 +8,55 @@
 6. Solve for a single optimal solution (using simplex algorithm as well as revised simplex algorithm, and smallest index rule)
 7. Solve for multiple optimal solutions and optimal rays
 8. Give optimal set
+
+# Context Free Grammar for the User File:
+
+LP -> var_list obj_fn constr_list
+
+var_list -> var
+          | var_list var
+          
+var -> VAR COLON ID non_neg SEMI
+
+non_neg -> e
+         | GREQZERO
+
+obj_fn -> OPT COLON linear_sum SEMI
+
+linear_sum -> product
+            | linear_sum ADD product
+
+product -> pcoef MUL ID
+         | pcoef ID
+         | pcoef
+         | ID
+
+pcoef -> NEG coef
+       | LPAR NEG coef RPAR
+       | LPAR coef RPAR
+       | coef
+
+coef -> CONST DOT CONST
+      | DOT CONST
+      | CONST
+      | CONST SLASH CONST
+
+constr_list -> const
+             | constr_list constr
+
+const -> ST linear_sum COMP linear_sum SEMI
+
+The scanner tokens are:
+ID -> [a-zA-z][a-zA-z0-9_]*
+VAR -> "var" | "variable"
+GREQZERO -> ">= 0" | ">=0"
+OPT -> "min" | "minimize" | "max" | "maximize"
+NEG -> "-"
+ADD -> "+" | "-"
+MUL -> "*"
+DOT -> "."
+CONST -> [0-9]+
+ST -> "st" | "s.t." | "subject to"
+COMP -> "=" | "==" | ">=" | "<="
+SEMI -> ";"
+ERR -> .

@@ -88,13 +88,11 @@ public class LP {
         File file = new File(fileName);
         try {
             Scanner scanner = new Scanner(file);
-            scanner.useDelimiter(";");
+            scanner.useDelimiter("");
     
             while(scanner.hasNext()) {
                 String next = scanner.next();
-                //System.out.print(next);
-
-
+                System.out.println(next);
             }
             scanner.close();
         }
