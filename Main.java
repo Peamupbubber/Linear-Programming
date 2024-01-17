@@ -33,12 +33,15 @@ public class Main {
         if(args.length < 1)
             System.out.println("No file provided!");
         else {
-            LP lp =  new LP(args[0]);
-        }
-        System.out.println("\n");
+            //LP lp =  new LP(args[0]);
 
-        LinearSum ls = new LinearSum();
-        ls.setConstant("(2/3)");
-        System.out.println(ls.getConstant());
+            FileReader.fileReader = new FileReader(args[0]);
+
+        }
+        // System.out.println("\n");
+
+        // LinearSum ls = new LinearSum();
+        // ls.setConstant("(2/3)");
+        // System.out.println(ls.getConstant());
     }
 }

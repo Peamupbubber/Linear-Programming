@@ -2,32 +2,26 @@
 import java.util.Scanner;
 import java.io.File;
 
-enum Token {
-    ID,
-    VAR,
-    GREQZERO,
-    OPT,
-    NEG,
-    ADD,
-    MUL,
-    DOT,
-    CONST,
-    ST,
-    COMP,
-    SEMI,
-    ERR
-}
-
 //Singleton Pattern
 public class FileReader {
     public static FileReader fileReader;
 
+    public char unget;
+
     private Scanner scanner;
 
     public FileReader(String fileName) throws Exception {
+        System.out.println("Init File Reader");
+
+        
         if(fileReader == null)
             fileReader = this;
+        
+        LinearProgramScanner.lpScanner = new LinearProgramScanner();
+        unget = 0;
         openFile(fileName);
+
+        testScanner();
     }
 
     private void openFile(String fileName) throws Exception {
@@ -49,6 +43,13 @@ public class FileReader {
         else {
             scanner.close();
             return 0;
+        }
+    }
+
+    public void testScanner() {
+        Token tok = LinearProgramScanner.lpScanner.scanner();
+        while(tok != Token.SCANEOF) {
+            System.out.println(LinearProgramScanner.lpScanner.getTokenName(tok));
         }
     }
 

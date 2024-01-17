@@ -1,7 +1,7 @@
 # Linear Programming
 
 1. Read in from text file the linear program's variables, objective function, and constraints
-2. Create a standard form LP out of this inforamtion
+2. Create a standard form LP out of this information
 3. Put the standard form LP into a tableau
 4. Attempt to put the tableau into canonical form (implement Method of Artificial Variables and Subproblem Technique)
 5. Return infeasible if so
@@ -16,10 +16,10 @@ LP -> var_list obj_fn constr_list
 var_list -> var
           | var_list var
           
-var -> VAR COLON ID non_neg SEMI
+var -> VAR COLON ID /* non_neg */ SEMI
 
-non_neg -> e
-         | GREQZERO
+//non_neg -> e          Taking out non_neg for now
+//         | GREQZERO
 
 obj_fn -> OPT COLON linear_sum SEMI
 
@@ -49,7 +49,7 @@ const -> ST linear_sum COMP linear_sum SEMI
 The scanner tokens are:
 ID -> [a-zA-z][a-zA-z0-9_]*
 VAR -> "var" | "variable"
-GREQZERO -> ">= 0" | ">=0"
+//GREQZERO -> ">= 0" | ">=0" NOT RIGHT NOW
 OPT -> "min" | "minimize" | "max" | "maximize"
 NEG -> "-"
 ADD -> "+" | "-"
@@ -57,6 +57,9 @@ MUL -> "*"
 DOT -> "."
 CONST -> [0-9]+
 ST -> "st" | "s.t." | "subject to"
-COMP -> "=" | "==" | ">=" | "<="
+COMP -> "=" | "==" | ">=" | "<=" | "<" | ">"
 SEMI -> ";"
 ERR -> .
+SCANEOF -> 0
+
+Might need to create a yylval structure in the parser for the tokens
