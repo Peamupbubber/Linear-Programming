@@ -1,4 +1,3 @@
-//Attempting to create a scanner / parser, ignoring how to truly link it at the moment
 import java.util.Scanner;
 import java.io.File;
 
@@ -13,7 +12,6 @@ public class FileReader {
     public FileReader(String fileName) throws Exception {
         System.out.println("Init File Reader");
 
-        
         if(fileReader == null)
             fileReader = this;
         

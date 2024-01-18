@@ -29,9 +29,9 @@ public class LinearProgramParser {
         }
         else {
             userProgramHasErrors = true;
-            System.out.println("Error: Current token should be " +
-            LinearProgramScanner.lpScanner.getTokenName(tok) + " but was " +
-            LinearProgramScanner.lpScanner.getTokenName(currentToken));
+            // System.out.println("Error: Current token should be " +
+            // LinearProgramScanner.lpScanner.getTokenName(tok) + " but was " +
+            // LinearProgramScanner.lpScanner.getTokenName(currentToken));
         }
     }
     
@@ -45,9 +45,12 @@ public class LinearProgramParser {
 
         LP();
 
-        if(currentToken != Token.SCANEOF || userProgramHasErrors) {
+        if(currentToken != Token.SCANEOF)
+            userProgramHasErrors = true;
+
+        if(userProgramHasErrors) {
             System.out.println("Error: invalid sytax in user program");
-            //Better message?
+            //Could implement line tracking to see where the syntax error occurred
         }
         else {
             System.out.println("This is a valid user LP");
