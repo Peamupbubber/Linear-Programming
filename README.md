@@ -48,22 +48,31 @@ constr -> ST linear_sum COMP linear_sum SEMI
 
 # The scanner tokens are:
 ID -> [a-zA-z][a-zA-z0-9_]*
+
 VAR -> "var" | "variable"
+
 //GREQZERO -> ">= 0" | ">=0" NOT RIGHT NOW
+
 OPT -> "min" | "minimize" | "max" | "maximize"
+
 NEG -> "-"
+
 ADD -> "+" | "-"
+
 MUL -> "*"
+
 DOT -> "."
+
 COLON -> ":"
+
 CONST -> [0-9]+
+
 ST -> "st" | "s.t." | "subject to"
+
 COMP -> "=" | "==" | ">=" | "<=" | "<" | ">"
+
 SEMI -> ";"
+
 ERR -> .
+
 SCANEOF -> 0
-
-
-Might need to create a yylval structure in the parser for the tokens
-
-// st: 2x1 + (6/5)x2 <= 4x2 - 2x3;
