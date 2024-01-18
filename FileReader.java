@@ -18,10 +18,13 @@ public class FileReader {
             fileReader = this;
         
         LinearProgramScanner.lpScanner = new LinearProgramScanner();
+        LinearProgramParser.lpParser = new LinearProgramParser();
+
         unget = 0;
         openFile(fileName);
 
-        testScanner();
+        //testScanner();
+        LinearProgramParser.lpParser.parse();
     }
 
     private void openFile(String fileName) throws Exception {
@@ -46,10 +49,12 @@ public class FileReader {
         }
     }
 
+    // For debugging the scanner
     public void testScanner() {
         Token tok = LinearProgramScanner.lpScanner.scanner();
         while(tok != Token.SCANEOF) {
             System.out.println(LinearProgramScanner.lpScanner.getTokenName(tok));
+            tok = LinearProgramScanner.lpScanner.scanner();
         }
     }
 

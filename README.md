@@ -31,8 +31,8 @@ product -> pcoef MUL ID
          | pcoef
          | ID
 
-pcoef -> NEG coef
-       | LPAR NEG coef RPAR
+pcoef -> ADD coef
+       | LPAR ADD coef RPAR
        | LPAR coef RPAR
        | coef
 
@@ -41,12 +41,12 @@ coef -> CONST DOT CONST
       | CONST
       | CONST SLASH CONST
 
-constr_list -> const
+constr_list -> constr
              | constr_list constr
 
-const -> ST linear_sum COMP linear_sum SEMI
+constr -> ST linear_sum COMP linear_sum SEMI
 
-The scanner tokens are:
+# The scanner tokens are:
 ID -> [a-zA-z][a-zA-z0-9_]*
 VAR -> "var" | "variable"
 //GREQZERO -> ">= 0" | ">=0" NOT RIGHT NOW
@@ -55,6 +55,7 @@ NEG -> "-"
 ADD -> "+" | "-"
 MUL -> "*"
 DOT -> "."
+COLON -> ":"
 CONST -> [0-9]+
 ST -> "st" | "s.t." | "subject to"
 COMP -> "=" | "==" | ">=" | "<=" | "<" | ">"
@@ -62,4 +63,7 @@ SEMI -> ";"
 ERR -> .
 SCANEOF -> 0
 
+
 Might need to create a yylval structure in the parser for the tokens
+
+// st: 2x1 + (6/5)x2 <= 4x2 - 2x3;

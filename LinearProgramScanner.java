@@ -30,7 +30,11 @@ public class LinearProgramScanner {
         tokenNames.put(Token.ADD, "ADD");
         tokenNames.put(Token.MUL, "MUL");
         tokenNames.put(Token.DOT, "DOT");
+        tokenNames.put(Token.COLON, "COLON");
         tokenNames.put(Token.CONST, "CONST");
+        tokenNames.put(Token.SLASH, "SLASH");
+        tokenNames.put(Token.LPAR, "LPAR");
+        tokenNames.put(Token.RPAR, "RPAR");
         tokenNames.put(Token.ST, "ST");
         tokenNames.put(Token.COMP, "COMP");
         tokenNames.put(Token.SEMI, "SEMI");
@@ -57,10 +61,12 @@ public class LinearProgramScanner {
         return tokenNames.get(tok);
     }
 
+    // At the moment, the cValue in the parser is set for every non str/int. This probably only needs to happen for comparison ops though
+
     public Token scanner() {
         char ch = '0';
         while(ch != 0) {
-
+            
             //Emulates the ungetc method which doesn't exist for the java scanner
             if(FileReader.fileReader.unget == 0)
                 ch = FileReader.fileReader.getNextChar();
@@ -69,35 +75,42 @@ public class LinearProgramScanner {
                 FileReader.fileReader.unget = 0;
             }
 
+            //System.out.println(ch);
+
             //Ignore whitespace and newlines, continue to return on EOF
             if(ch == 0 || ch == '\n' || ch == '\t' || ch == ' ')
                 continue;
 
             // Reserved word or ID case
             else if((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
-                boolean containsInvalidChar = false;
+                //boolean containsInvalidChar = false;
                 String id = "";
-                while((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch == '_' || ch == '.' || ch == ' ') {
+                while((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')|| (ch >= '0' && ch <= '9') || ch == '_') {
                     //Check if the id contains '.' or ' ' for the "s.t." and "subject to" reserved words
-                    if(ch == '.' || ch == ' ')
-                        containsInvalidChar = true;
+                    // || ch == '.' || ch == ' '
+                    //if(ch == '.' || ch == ' ')
+                    //    containsInvalidChar = true;
 
                     id += ch;
                     ch = FileReader.fileReader.getNextChar();
                 }
 
                 FileReader.fileReader.unget = ch;
+                //System.out.println(id);
                 
                 //check for res words, if not and invalid ERR
                 //Report the type of error and line number?
-                Token res = reservedWords.get(id);
+                Token res = reservedWords.get(id.toLowerCase());
                 if(res != null)
                     return res;
-                else if(containsInvalidChar)
-                    return Token.ERR;
+                // else if(containsInvalidChar) {
+                //     System.out.println("\"" + id + "\"");
+                //     return Token.ERR;
+                // }
                 else {
                     //The id is stored in lastString for use in the parser
                     lastText = id;
+                    LinearProgramParser.lpParser.lValues.sValue = id;
                     return Token.ID;
                 }
             }
@@ -113,22 +126,50 @@ public class LinearProgramScanner {
                 FileReader.fileReader.unget = ch;
 
                 lastText = cons;
+                LinearProgramParser.lpParser.lValues.iValue = Integer.parseInt(cons);
                 return Token.CONST;
             }
 
             // ADD case
             else if(ch == '+' || ch == '-') {
+                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.ADD;
             }
 
             // MUL case
             else if(ch == '*') {
+                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.MUL;
             }
 
             // DOT case
             else if(ch == '.') {
+                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.DOT;
+            }
+
+            // COLON case
+            else if(ch == ':') {
+                LinearProgramParser.lpParser.lValues.cValue = ch;
+                return Token.COLON;
+            }
+
+            // SLASH case
+            else if(ch == '/') {
+                LinearProgramParser.lpParser.lValues.cValue = ch;
+                return Token.SLASH;
+            }
+
+            // LPAR case
+            else if(ch == '(') {
+                LinearProgramParser.lpParser.lValues.cValue = ch;
+                return Token.LPAR;
+            }
+
+            // RPAR case
+            else if(ch == ')') {
+                LinearProgramParser.lpParser.lValues.cValue = ch;
+                return Token.RPAR;
             }
 
             // COMP case
@@ -137,20 +178,34 @@ public class LinearProgramScanner {
                 if(ch != '=') {
                     FileReader.fileReader.unget = ch;
                 }
+                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.COMP;
             }
 
             // SEMI case
             else if(ch == ';') {
+                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.SEMI;
             }
 
             else if(ch == '<' || ch == '>') {
+                LinearProgramParser.lpParser.lValues.cValue = ch;
+
                 ch = FileReader.fileReader.getNextChar();
                 if(ch != '=') {
                     FileReader.fileReader.unget = ch;
                 }
+                else if(ch == '<') {
+                    LinearProgramParser.lpParser.lValues.cValue = 'L';
+                }
+                else
+                    LinearProgramParser.lpParser.lValues.cValue = 'G';
+
                 return Token.COMP;
+            }
+
+            else {
+                return Token.ERR;
             }
         }
         return Token.SCANEOF;

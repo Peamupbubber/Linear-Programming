@@ -1,0 +1,20 @@
+public enum Token {
+    ID,
+    VAR,
+    GREQZERO,
+    OPT,
+    NEG,
+    ADD,
+    MUL,
+    DOT,
+    COLON,
+    CONST,
+    SLASH,
+    LPAR,
+    RPAR,
+    ST,
+    COMP,
+    SEMI,
+    ERR,
+    SCANEOF
+}
