@@ -31,15 +31,17 @@ product -> pcoef MUL ID
          | pcoef
          | ID
 
-pcoef -> ADD coef
-       | LPAR ADD coef RPAR
-       | LPAR coef RPAR
-       | coef
+pcoef -> ADD scoef
+       | LPAR ADD scoef RPAR
+       | LPAR scoef RPAR
+       | scoef
+
+scoef -> coef
+       | coef SLASH coef
 
 coef -> CONST DOT CONST
       | DOT CONST
       | CONST
-      | CONST SLASH CONST
 
 constr_list -> constr
              | constr_list constr

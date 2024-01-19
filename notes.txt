@@ -1,1 +1,9 @@
-Need to extrapolate dec num into CFG state, at the moment (1.0/2) is invalid
+If a token is ever added to the scanner make sure to change the grammar,
+parser, scanner, token names, and reservered words list if needed.
+
+
+Somewhere IDs need to be ensured that they match the given variables
+
+If I implement non negative vars, make sure it is processed like a constraint
+
+In linear sum, ensure the - is processed in the following product

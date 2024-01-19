@@ -23,6 +23,8 @@ public class LinearProgramParser {
         userProgramHasErrors = false;
     }
 
+    // Matches the current token with the given token, and gets the next token from the scanner
+    // Reports an error if the tokens do not match
     private void match(Token tok) {
         if(currentToken == tok) {
             currentToken = LinearProgramScanner.lpScanner.scanner();
@@ -65,6 +67,7 @@ public class LinearProgramParser {
         constr_list();
     }
 
+    // Store variables in the LP
     private void var_list() {
         var();
         while(currentToken == Token.VAR)
@@ -86,6 +89,7 @@ public class LinearProgramParser {
         match(Token.SEMI);
     }
 
+    // Going to have to store this in a linked list somehow
     private void linear_sum() {
         product();
         while(currentToken == Token.ADD) {
@@ -94,6 +98,7 @@ public class LinearProgramParser {
         }
     }
 
+    // Going to have to store this
     private void product() {
         // x
         if(currentToken == Token.ID) {
@@ -116,7 +121,7 @@ public class LinearProgramParser {
             // -c
             case ADD:
                 match(Token.ADD);
-                coef();
+                scoef();
                 break;
 
             // (-c) || (c)
@@ -125,32 +130,36 @@ public class LinearProgramParser {
                 if(currentToken == Token.ADD)
                     match(Token.ADD);
                 
-                coef();
+                scoef();
                 match(Token.RPAR);
                 break;
         
             // c
             default:
-                coef();
+                scoef();
                 break;
         }
     }
 
+    // Matches single coefficient or a fraction
+    private void scoef() {
+        coef();
+
+        if(currentToken == Token.SLASH) {
+            match(Token.SLASH);
+            coef();
+        }
+    }
+
+    // c || .c || c.c
     private void coef() {
+        if(currentToken == Token.CONST) {
+            match(Token.CONST);
+        }
+
         if(currentToken == Token.DOT) {
             match(Token.DOT);
             match(Token.CONST);
-        }
-        else {
-            match(Token.CONST);
-            if(currentToken == Token.SLASH) {
-                match(Token.SLASH);
-                match(Token.CONST);
-            }
-            else if(currentToken == Token.DOT) {
-                match(Token.DOT);
-                match(Token.CONST);
-            }
         }
     }
 
