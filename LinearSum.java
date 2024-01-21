@@ -5,14 +5,14 @@
  */ 
 
 public class LinearSum {
-    private float constant;
+    public float constant;
     private String variable;
 
     private LinearSum next;
 
     public LinearSum() {
         setConstant("1");
-        setVaraible("x");
+        setVariable("x");
     }
 
     public LinearSum(String constant, String variable) {
@@ -31,7 +31,7 @@ public class LinearSum {
         }
     }
 
-    public void setVaraible(String variable) {
+    public void setVariable(String variable) {
         this.variable = variable;
     }
 

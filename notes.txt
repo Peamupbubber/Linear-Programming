@@ -7,3 +7,5 @@ Somewhere IDs need to be ensured that they match the given variables
 If I implement non negative vars, make sure it is processed like a constraint
 
 In linear sum, ensure the - is processed in the following product
+
+

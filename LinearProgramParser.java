@@ -4,6 +4,9 @@ public class LinearProgramParser {
         public String sValue;
         public char cValue;
         public int iValue;
+
+        public Constraint currentConstraint;
+        public LinearSum currentLinearSum;
     }
 
     public static LinearProgramParser lpParser;
@@ -20,6 +23,7 @@ public class LinearProgramParser {
             lpParser = this;
 
         lValues = new LValues();
+        lValues.currentLinearSum = new LinearSum();
         userProgramHasErrors = false;
     }
 
@@ -121,14 +125,23 @@ public class LinearProgramParser {
             // -c
             case ADD:
                 match(Token.ADD);
+                if(lValues.cValue == '-') {
+                    lValues.iValue *= -1;
+                    System.out.println(lValues.iValue);
+                }
                 scoef();
                 break;
 
             // (-c) || (c)
             case LPAR:
                 match(Token.LPAR);
-                if(currentToken == Token.ADD)
+                if(currentToken == Token.ADD) {
                     match(Token.ADD);
+                    if(lValues.cValue == '-') {
+                        lValues.iValue *= -1;
+                        System.out.println(lValues.iValue);
+                    }
+                }
                 
                 scoef();
                 match(Token.RPAR);
@@ -144,23 +157,36 @@ public class LinearProgramParser {
     // Matches single coefficient or a fraction
     private void scoef() {
         coef();
+        float numerator = lValues.iValue;
 
         if(currentToken == Token.SLASH) {
             match(Token.SLASH);
             coef();
+            float constant = numerator / lValues.iValue;
+            lValues.currentLinearSum.constant = constant;
+            System.out.println(lValues.currentLinearSum.constant);
         }
+        else
+            lValues.currentLinearSum.constant = numerator;
     }
 
     // c || .c || c.c
     private void coef() {
-        if(currentToken == Token.CONST) {
-            match(Token.CONST);
-        }
-
         if(currentToken == Token.DOT) {
+            // decimal is 0
             match(Token.DOT);
             match(Token.CONST);
         }
+        else {
+            match(Token.CONST);
+            // decimal is iValue
+            if(currentToken == Token.DOT) {
+                match(Token.DOT);
+                match(Token.CONST);
+            }
+            //System.out.println(lValues.iValue);
+        }
+
     }
 
     //Link together in a constraint class somehow?
@@ -175,8 +201,12 @@ public class LinearProgramParser {
         match(Token.ST);
         match(Token.COLON);
         linear_sum();
+        // assign current constrait left linear sum to the current linear sum
         match(Token.COMP);
         linear_sum();
+        // same for right linear sum
         match(Token.SEMI);
+        // add current constraint to LP list
     }
+
 }
