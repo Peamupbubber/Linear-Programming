@@ -5,30 +5,25 @@
  */ 
 
 public class LinearSum {
-    public float constant;
+    public double constant;
     private String variable;
 
-    private LinearSum next;
+    public LinearSum next;
 
     public LinearSum() {
-        setConstant("1");
-        setVariable("x");
+        constant = 1.0;
+        variable = "";
     }
 
-    public LinearSum(String constant, String variable) {
-        setConstant(constant);
-        this.variable = variable;
+    public void setFractionConstant(int numerator, int denominator) {
+        constant = (double)numerator / denominator;
     }
 
-    //Takes in a string and sets the constant to a float, can be given as "(x/y)", "x.y", or "x"
-    public void setConstant(String constant) {
-        String[] frac = constant.split("/");
-        if(frac.length == 2) {
-            this.constant = Integer.parseInt(frac[0].substring(1)) / (float)Integer.parseInt(frac[1].substring(0, frac[1].length() - 1));
-        }
-        else {
-            this.constant = Float.parseFloat(constant);
-        }
+    public void setDecimalConstant(int beforeDecimal, int afterDecimal) {
+        // constant = numerator / denominator;
+        int len = String.valueOf(afterDecimal).length();
+        System.out.println(len);
+        constant = beforeDecimal + (afterDecimal / Math.pow(10, len));
     }
 
     public void setVariable(String variable) {
@@ -39,7 +34,15 @@ public class LinearSum {
         this.next = next;
     }
 
-    public float getConstant() {
+    public double getConstant() {
         return constant;
+    }
+
+    public void display() {
+        System.out.println(constant + "*" + variable + "+ ");
+
+        if(next != null) {
+            next.display();
+        }
     }
 }

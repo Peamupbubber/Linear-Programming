@@ -23,7 +23,7 @@ public class LinearProgramParser {
             lpParser = this;
 
         lValues = new LValues();
-        lValues.currentLinearSum = new LinearSum();
+        // lValues.currentLinearSum = new LinearSum();
         userProgramHasErrors = false;
     }
 
@@ -95,9 +95,12 @@ public class LinearProgramParser {
 
     // Going to have to store this in a linked list somehow
     private void linear_sum() {
+        lValues.currentLinearSum = new LinearSum();
         product();
         while(currentToken == Token.ADD) {
             match(Token.ADD);
+            lValues.currentLinearSum.next = new LinearSum();
+            lValues.currentLinearSum = lValues.currentLinearSum.next;
             product();
         }
     }
@@ -127,7 +130,7 @@ public class LinearProgramParser {
                 match(Token.ADD);
                 if(lValues.cValue == '-') {
                     lValues.iValue *= -1;
-                    System.out.println(lValues.iValue);
+                    // System.out.println(lValues.iValue);
                 }
                 scoef();
                 break;
@@ -139,7 +142,7 @@ public class LinearProgramParser {
                     match(Token.ADD);
                     if(lValues.cValue == '-') {
                         lValues.iValue *= -1;
-                        System.out.println(lValues.iValue);
+                        // System.out.println(lValues.iValue);
                     }
                 }
                 
@@ -157,14 +160,15 @@ public class LinearProgramParser {
     // Matches single coefficient or a fraction
     private void scoef() {
         coef();
-        float numerator = lValues.iValue;
+        int numerator = lValues.iValue;
 
         if(currentToken == Token.SLASH) {
             match(Token.SLASH);
             coef();
-            float constant = numerator / lValues.iValue;
-            lValues.currentLinearSum.constant = constant;
-            System.out.println(lValues.currentLinearSum.constant);
+            //float constant = numerator / lValues.iValue;
+            //lValues.currentLinearSum.constant = constant;
+            lValues.currentLinearSum.setFractionConstant(numerator, lValues.iValue);
+            // System.out.println(lValues.currentLinearSum.constant);
         }
         else
             lValues.currentLinearSum.constant = numerator;
@@ -179,12 +183,13 @@ public class LinearProgramParser {
         }
         else {
             match(Token.CONST);
-            // decimal is iValue
+            int beforeDecimal = lValues.iValue;
             if(currentToken == Token.DOT) {
                 match(Token.DOT);
                 match(Token.CONST);
+                lValues.currentLinearSum.setDecimalConstant(beforeDecimal, lValues.iValue);
+                // System.out.println(lValues.currentLinearSum.constant);
             }
-            //System.out.println(lValues.iValue);
         }
 
     }
@@ -198,15 +203,19 @@ public class LinearProgramParser {
     }
 
     private void constr() {
+        lValues.currentConstraint = new Constraint();
         match(Token.ST);
         match(Token.COLON);
         linear_sum();
         // assign current constrait left linear sum to the current linear sum
+        lValues.currentConstraint.setLeftLinearSum(lValues.currentLinearSum);
         match(Token.COMP);
         linear_sum();
         // same for right linear sum
+        lValues.currentConstraint.setRightLinearSum(lValues.currentLinearSum);
         match(Token.SEMI);
         // add current constraint to LP list
+        LP.lp.addConstraint(lValues.currentConstraint);
     }
 
 }

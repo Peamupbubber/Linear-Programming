@@ -12,39 +12,33 @@ enum Type {
     ERROR
 }
 
-class Constraint {
-    LinearSum left;
-    LinearSum right;
-    String op;
+// class Constraint {
+//     private LinearSum left;
+//     private LinearSum right;
+//     String op;
 
-    public Constraint(String con) {
-        left = null;
-        right = null;
-        //parseConstraint(con);
-    }
+//     public Constraint(String con) {
+//         left = null;
+//         right = null;
+//     }
 
-    // private void parseConstraint(String con) {
-    //     String[] items = con.split(" ");
+//     public void setLeftLinearSum(LinearSum ls) {
+//         left = ls;
+//     }
 
-    //     LinearSum currentNode = left;
+//     public void setRightLinearSum(LinearSum ls) {
+//         right = ls;
+//     }
 
-    //     for(int i = 0; i < items.length; i++) {
-    //         int j = 0;
-    //         while(j < items[i].length() && constChar(items[i].charAt(j))) {
-    //             j++;
-    //         }
-    //         left = new LinearSum(items[i].substring(0, j), items[i].substring(j));
-
-    //         System.out.println("Item: " + con.substring(0, j));
-    //     }
-    // }
-
-    private boolean constChar(char c) {
-        return c == '(' || c == ')' || c == '.' || (c >= '0' && c <= '9');
-    }
-}
+//     //Simplify the two sides of the equation
+//     private void simplify() {
+//         System.out.println("Simplifying constraint");
+//     }
+// }
 
 public class LP {
+    public static LP lp;
+
     private List<String> variables;
     //private HashMap<String, Integer> var_indicies;
     private List<Constraint> constraints;
@@ -56,12 +50,26 @@ public class LP {
     // private List<String> ofMaxIDs;
 
     public LP(String file) throws Exception {
+        System.out.println("\nInit Linear Program");
+
+        if(lp == null)
+            lp = this;
+
         variables = new ArrayList<String>();
-        constraints = new ArrayList<String>();
+        constraints = new ArrayList<Constraint>();
         objectiveFunction = null;
 
-        initializeIDNames();
-        parse(file);
+        FileReader.fileReader = new FileReader(file);
+    }
+
+    public void addConstraint(Constraint constraint) {
+        constraints.add(constraint);
+    }
+
+    public void displayConstraints() {
+        for(Constraint c : constraints) {
+            c.display();
+        }
     }
 
     // private void initializeIDNames() {
@@ -101,18 +109,18 @@ public class LP {
     //     }
     // }
 
-    Type type(String identifier) {
-        identifier = identifier.toLowerCase();
+    // Type type(String identifier) {
+    //     identifier = identifier.toLowerCase();
 
-        if(variableIDs.contains(identifier))
-            return Type.VARIABLE;
-        else if(constraintIDs.contains(identifier))
-            return Type.CONSTRAINT;
-        else if(ofMinIDs.contains(identifier))
-            return Type.OF_MIN;
-        else if(ofMaxIDs.contains(identifier))
-            return Type.OF_MAX;
-        else
-            return Type.ERROR;
-    }
+    //     if(variableIDs.contains(identifier))
+    //         return Type.VARIABLE;
+    //     else if(constraintIDs.contains(identifier))
+    //         return Type.CONSTRAINT;
+    //     else if(ofMinIDs.contains(identifier))
+    //         return Type.OF_MIN;
+    //     else if(ofMaxIDs.contains(identifier))
+    //         return Type.OF_MAX;
+    //     else
+    //         return Type.ERROR;
+    // }
 }

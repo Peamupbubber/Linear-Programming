@@ -9,3 +9,4 @@ If I implement non negative vars, make sure it is processed like a constraint
 In linear sum, ensure the - is processed in the following product
 
 
+NumberFormatException can occur for decimals too long, consider storing all constants in linked lists?

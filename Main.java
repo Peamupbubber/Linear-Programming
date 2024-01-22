@@ -33,9 +33,11 @@ public class Main {
         if(args.length < 1)
             System.out.println("No file provided!");
         else {
-            //LP lp =  new LP(args[0]);
+            LP.lp =  new LP(args[0]);
 
-            FileReader.fileReader = new FileReader(args[0]);
+            LP.lp.displayConstraints();
+
+            // FileReader.fileReader = new FileReader(args[0]);
 
         }
         // System.out.println("\n");
