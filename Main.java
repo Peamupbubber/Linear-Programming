@@ -19,25 +19,12 @@ public class Main {
       * So, predefined matrix of 0's, and each constraints constant can be assigned the i value of its entry in the constraint list and the j value of that varible name's index in the array (or use hashmap for speedy lookup: i.e. (x1, x2, x3) -> (1, 2, 3))
       */
 
-
-
-
     public static void main(String[] args) throws Exception {
         if(args.length < 1)
             System.out.println("No file provided!");
         else {
             LP.lp =  new LP(args[0]);
-
-            LP.lp.displayConstraints();
-            // LP.lp.displayVariables();
-
-            // FileReader.fileReader = new FileReader(args[0]);
-
+            LP.lp.display();
         }
-        // System.out.println("\n");
-
-        // LinearSum ls = new LinearSum();
-        // ls.setConstant("(2/3)");
-        // System.out.println(ls.getConstant());
     }
 }

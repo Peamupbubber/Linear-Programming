@@ -1,27 +1,31 @@
-/* LE = CONSTANT * VARIABLE OP LE
- * ex: 2x - 3y - 4
- *     2, x, (-3, y, (4, null, (null)))
- *      
- */
-
 public class LinearSum {
     public LinearSumNode node;
 
     public LinearSum() {
-        node = null;
+        node = new LinearSumNode();
     }
 
-    // public void display() {
-        
-    // }
-    
+    public void display() {
+        LinearSumNode temp = node;
+        while(temp != null) {
+            if(temp.constant != 1.0 || temp.variable.equals("")) {
+                System.out.print(temp.constant);
+                if(!temp.variable.equals(""))
+                    System.out.print("*");
+            }
+            if(!temp.variable.equals(""))
+                System.out.print(temp.variable);
+
+            if(temp.next != null) {
+                System.out.print(" + ");
+            }
+            
+            temp = temp.next;
+        }
+    }
+
+    // Creates a reverse linked list of linear sum nodes, this is not a problem since addition is communitive
     public void addNode() {
-        // LinearSumNode temp = node;
-        // while(temp != null && temp.next != null) {
-        //     temp = temp.next;
-        // }
-        // temp.next = new LinearSumNode();
-        
         if(node == null)
             node = new LinearSumNode();
         else {
@@ -31,16 +35,32 @@ public class LinearSum {
         }
     }
 
-    public void setFractionConstantAtEnd(int numerator, int denominator) {
-        
+    public void setFractionConstant(int numerator, int denominator) {
+        node.setFractionConstant(numerator, denominator);
+    }
+
+    public void setDecimalConstant(int beforeDecimal, int afterDecimal) {
+        node.setDecimalConstant(beforeDecimal, afterDecimal);
+    }
+
+    public void setConstant(double con) {
+        node.setConstant(con);
+    }
+
+    public void negateConstant() {
+        node.constant *= -1;
+    }
+
+    public void setVariable(String var) {
+        node.setVariable(var);
     }
 }
 
 class LinearSumNode {
-    public double constant;
-    public String variable;
+    protected double constant;
+    protected String variable;
 
-    public LinearSumNode next;
+    protected LinearSumNode next;
 
     public LinearSumNode() {
         constant = 1.0;
@@ -64,15 +84,12 @@ class LinearSumNode {
         this.next = next;
     }
 
-    public double getConstant() {
-        return constant;
+    public void setConstant(double con) {
+        // if(this.constant == 1.0) //TEMP FIX, dont need anymore?
+            this.constant = con;
     }
 
-    public void display() {
-        System.out.println(constant + "*" + variable + "+ ");
-
-        if(next != null) {
-            next.display();
-        }
+    public double getConstant() {
+        return constant;
     }
 }

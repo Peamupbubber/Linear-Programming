@@ -5,6 +5,8 @@ public class LinearProgramParser {
         public char cValue;
         public int iValue;
 
+        public double dValue;
+
         public Constraint currentConstraint;
         public LinearSum currentLinearSum;
     }
@@ -23,7 +25,6 @@ public class LinearProgramParser {
             lpParser = this;
 
         lValues = new LValues();
-        // lValues.currentLinearSum = new LinearSum();
         userProgramHasErrors = false;
     }
 
@@ -35,18 +36,11 @@ public class LinearProgramParser {
         }
         else {
             userProgramHasErrors = true;
-            // System.out.println("Error: Current token should be " +
-            // LinearProgramScanner.lpScanner.getTokenName(tok) + " but was " +
-            // LinearProgramScanner.lpScanner.getTokenName(currentToken));
         }
     }
-    
-    // This ideally will parse the .txt file, identifying if it is valid syntax
-    // and if so sending all of the information to the LP object
 
     // Returns true on success
     public boolean parse() {
-
         currentToken = LinearProgramScanner.lpScanner.scanner();
 
         LP();
@@ -93,6 +87,7 @@ public class LinearProgramParser {
         match(Token.OPT);
         match(Token.COLON);
         linear_sum();
+        LP.lp.setObjectiveFunction(lValues.currentLinearSum);
         match(Token.SEMI);
     }
 
@@ -102,9 +97,12 @@ public class LinearProgramParser {
         product();
         while(currentToken == Token.ADD) {
             match(Token.ADD);
-            lValues.currentLinearSum.next = new LinearSum();
-            lValues.currentLinearSum = lValues.currentLinearSum.next;
+            char op = lValues.cValue;
+            lValues.currentLinearSum.addNode();
             product();
+            if(op == '-') {
+                lValues.currentLinearSum.negateConstant();
+            }
         }
     }
 
@@ -113,7 +111,7 @@ public class LinearProgramParser {
         // x
         if(currentToken == Token.ID) {
             match(Token.ID);
-            lValues.currentLinearSum.variable = lValues.sValue;
+            lValues.currentLinearSum.setVariable(lValues.sValue);
         }
 
         // cx || c*x
@@ -124,7 +122,7 @@ public class LinearProgramParser {
 
             if(currentToken == Token.ID) {
                 match(Token.ID);
-                lValues.currentLinearSum.variable = lValues.sValue;
+                lValues.currentLinearSum.setVariable(lValues.sValue);
             }
         }
     }
@@ -134,11 +132,10 @@ public class LinearProgramParser {
             // -c
             case ADD:
                 match(Token.ADD);
-                if(lValues.cValue == '-') {
-                    lValues.iValue *= -1;
-                    // System.out.println(lValues.iValue);
-                }
                 scoef();
+                if(lValues.cValue == '-') {
+                    lValues.currentLinearSum.negateConstant();
+                }
                 break;
 
             // (-c) || (c)
@@ -146,13 +143,12 @@ public class LinearProgramParser {
                 match(Token.LPAR);
                 if(currentToken == Token.ADD) {
                     match(Token.ADD);
-                    if(lValues.cValue == '-') {
-                        lValues.iValue *= -1;
-                        // System.out.println(lValues.iValue);
-                    }
                 }
                 
                 scoef();
+                if(lValues.cValue == '-') {
+                    lValues.currentLinearSum.negateConstant();
+                }
                 match(Token.RPAR);
                 break;
         
@@ -166,26 +162,23 @@ public class LinearProgramParser {
     // Matches single coefficient or a fraction
     private void scoef() {
         coef();
-        int numerator = lValues.iValue;
+        double numerator = lValues.dValue;
 
         if(currentToken == Token.SLASH) {
             match(Token.SLASH);
             coef();
-            //float constant = numerator / lValues.iValue;
-            //lValues.currentLinearSum.constant = constant;
-            lValues.currentLinearSum.setFractionConstant(numerator, lValues.iValue);
-            // System.out.println(lValues.currentLinearSum.constant);
+            lValues.currentLinearSum.setConstant(numerator / lValues.dValue);
         }
         else
-            lValues.currentLinearSum.constant = numerator;
+            lValues.currentLinearSum.setConstant(numerator);
     }
 
     // c || .c || c.c
     private void coef() {
         if(currentToken == Token.DOT) {
-            // decimal is 0
             match(Token.DOT);
             match(Token.CONST);
+            lValues.dValue = convertToDecimal(0, lValues.iValue);
         }
         else {
             match(Token.CONST);
@@ -193,8 +186,11 @@ public class LinearProgramParser {
             if(currentToken == Token.DOT) {
                 match(Token.DOT);
                 match(Token.CONST);
-                lValues.currentLinearSum.setDecimalConstant(beforeDecimal, lValues.iValue);
-                // System.out.println(lValues.currentLinearSum.constant);
+
+                lValues.dValue = convertToDecimal(beforeDecimal, lValues.iValue);
+            }
+            else {
+                lValues.dValue = (double)beforeDecimal;
             }
         }
 
@@ -213,15 +209,20 @@ public class LinearProgramParser {
         match(Token.ST);
         match(Token.COLON);
         linear_sum();
-        // assign current constrait left linear sum to the current linear sum
         lValues.currentConstraint.setLeftLinearSum(lValues.currentLinearSum);
+
         match(Token.COMP);
+        lValues.currentConstraint.setComparisonOp(lValues.cValue);
+
         linear_sum();
-        // same for right linear sum
         lValues.currentConstraint.setRightLinearSum(lValues.currentLinearSum);
+
         match(Token.SEMI);
-        // add current constraint to LP list
         LP.lp.addConstraint(lValues.currentConstraint);
     }
 
+    public double convertToDecimal(int beforeDecimal, int afterDecimal) {
+        int len = String.valueOf(afterDecimal).length();
+        return beforeDecimal + (afterDecimal / Math.pow(10, len));
+    }
 }

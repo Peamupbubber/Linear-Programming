@@ -21,7 +21,6 @@ public class FileReader {
         unget = 0;
         openFile(fileName);
 
-        //testScanner();
         LinearProgramParser.lpParser.parse();
     }
 

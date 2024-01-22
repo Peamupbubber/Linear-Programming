@@ -10,3 +10,5 @@ In linear sum, ensure the - is processed in the following product
 
 
 NumberFormatException can occur for decimals too long, consider storing all constants in linked lists?
+
+At the moment, decimal fractions dont set the values properly, scoef will try to overwrite the value

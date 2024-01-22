@@ -137,37 +137,31 @@ public class LinearProgramScanner {
 
             // MUL case
             else if(ch == '*') {
-                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.MUL;
             }
 
             // DOT case
             else if(ch == '.') {
-                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.DOT;
             }
 
             // COLON case
             else if(ch == ':') {
-                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.COLON;
             }
 
             // SLASH case
             else if(ch == '/') {
-                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.SLASH;
             }
 
             // LPAR case
             else if(ch == '(') {
-                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.LPAR;
             }
 
             // RPAR case
             else if(ch == ')') {
-                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.RPAR;
             }
 
@@ -183,18 +177,18 @@ public class LinearProgramScanner {
 
             // SEMI case
             else if(ch == ';') {
-                LinearProgramParser.lpParser.lValues.cValue = ch;
                 return Token.SEMI;
             }
 
             else if(ch == '<' || ch == '>') {
                 LinearProgramParser.lpParser.lValues.cValue = ch;
+                char firstCh = ch;
 
                 ch = FileReader.fileReader.getNextChar();
                 if(ch != '=') {
                     FileReader.fileReader.unget = ch;
                 }
-                else if(ch == '<') {
+                else if(firstCh == '<') {
                     LinearProgramParser.lpParser.lValues.cValue = 'L';
                 }
                 else
