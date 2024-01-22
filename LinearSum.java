@@ -2,15 +2,35 @@
  * ex: 2x - 3y - 4
  *     2, x, (-3, y, (4, null, (null)))
  *      
- */ 
+ */
 
 public class LinearSum {
-    public double constant;
-    private String variable;
-
-    public LinearSum next;
+    public LinearSumNode node;
 
     public LinearSum() {
+        node = null;
+    }
+
+    // public void display() {
+        
+    // }
+    
+    public void addNode() {
+        LinearSumNode temp = node;
+        while(temp != null && temp.next != null) {
+            temp = temp.next;
+        }
+        temp.next = new LinearSumNode();
+    }
+}
+
+class LinearSumNode {
+    public double constant;
+    public String variable;
+
+    public LinearSumNode next;
+
+    public LinearSumNode() {
         constant = 1.0;
         variable = "";
     }
@@ -20,9 +40,7 @@ public class LinearSum {
     }
 
     public void setDecimalConstant(int beforeDecimal, int afterDecimal) {
-        // constant = numerator / denominator;
         int len = String.valueOf(afterDecimal).length();
-        System.out.println(len);
         constant = beforeDecimal + (afterDecimal / Math.pow(10, len));
     }
 
@@ -30,7 +48,7 @@ public class LinearSum {
         this.variable = variable;
     }
 
-    public void setNext(LinearSum next) {
+    public void setNext(LinearSumNode next) {
         this.next = next;
     }
 

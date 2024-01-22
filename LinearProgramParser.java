@@ -74,8 +74,11 @@ public class LinearProgramParser {
     // Store variables in the LP
     private void var_list() {
         var();
-        while(currentToken == Token.VAR)
+        LP.lp.addVariable(lValues.sValue);
+        while(currentToken == Token.VAR) {
             var();
+            LP.lp.addVariable(lValues.sValue);
+        }
     }
 
     private void var() {
@@ -110,6 +113,7 @@ public class LinearProgramParser {
         // x
         if(currentToken == Token.ID) {
             match(Token.ID);
+            lValues.currentLinearSum.variable = lValues.sValue;
         }
 
         // cx || c*x
@@ -118,8 +122,10 @@ public class LinearProgramParser {
             if(currentToken == Token.MUL)
                 match(Token.MUL);
 
-            if(currentToken == Token.ID)
+            if(currentToken == Token.ID) {
                 match(Token.ID);
+                lValues.currentLinearSum.variable = lValues.sValue;
+            }
         }
     }
 

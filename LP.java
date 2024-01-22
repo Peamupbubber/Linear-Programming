@@ -1,8 +1,5 @@
-import java.util.Scanner;
-import java.io.File;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 enum Type {
     VARIABLE,
@@ -62,8 +59,22 @@ public class LP {
         FileReader.fileReader = new FileReader(file);
     }
 
+    public void addVariable(String variable) {
+        variables.add(variable);
+    }
+
     public void addConstraint(Constraint constraint) {
         constraints.add(constraint);
+    }
+
+    public void displayVariables() {
+        System.out.println();
+        for(int i = 0; i < variables.size(); i++) {
+            System.out.print(variables.get(i));
+            if(i != variables.size() - 1)
+                System.out.print(", ");
+        }
+        System.out.println();
     }
 
     public void displayConstraints() {
