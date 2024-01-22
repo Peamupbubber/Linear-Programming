@@ -16,11 +16,23 @@ public class LinearSum {
     // }
     
     public void addNode() {
-        LinearSumNode temp = node;
-        while(temp != null && temp.next != null) {
-            temp = temp.next;
+        // LinearSumNode temp = node;
+        // while(temp != null && temp.next != null) {
+        //     temp = temp.next;
+        // }
+        // temp.next = new LinearSumNode();
+        
+        if(node == null)
+            node = new LinearSumNode();
+        else {
+            LinearSumNode newNode = new LinearSumNode();
+            newNode.next = node;
+            node = newNode;
         }
-        temp.next = new LinearSumNode();
+    }
+
+    public void setFractionConstantAtEnd(int numerator, int denominator) {
+        
     }
 }
 
