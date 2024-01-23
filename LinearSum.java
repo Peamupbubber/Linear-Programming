@@ -1,8 +1,19 @@
+import java.util.HashMap;
+import java.util.Map;
+
 public class LinearSum {
     public LinearSumNode node;
 
     public LinearSum() {
         node = new LinearSumNode();
+    }
+
+    public LinearSum(String var, double con) {
+        addNode(var, con);
+    }
+
+    public LinearSum(HashMap<String, Double> map) {
+        convertMapToLS(map);
     }
 
     public void display() {
@@ -33,6 +44,49 @@ public class LinearSum {
             newNode.next = node;
             node = newNode;
         }
+    }
+
+    public void addNode(String var, double con) {
+        if(node == null)
+            node = new LinearSumNode();
+        else {
+            LinearSumNode newNode = new LinearSumNode();
+            newNode.next = node;
+            node = newNode;
+        }
+        node.variable = var;
+        node.constant = con;
+    }
+
+    // Only used to create a new LinearSum
+    private void convertMapToLS(HashMap<String, Double> map) {
+        for(Map.Entry<String, Double> set : map.entrySet()) {
+            addNode(set.getKey(), set.getValue());
+        }
+    }
+
+    // Simplifies the linear sum, ensuring all like variables are combined
+    public void simplify() {
+        HashMap<String, Double> map = buildMap();
+        node = null;
+        convertMapToLS(map);
+    }
+
+    public HashMap<String, Double> buildMap() {
+        HashMap<String, Double> productMap = new HashMap<String, Double>();
+
+        LinearSumNode temp = node;
+
+        while(temp != null) {
+            if(productMap.get(temp.variable) == null)
+                productMap.put(temp.variable, temp.constant);
+            else
+                productMap.put(temp.variable, productMap.get(temp.variable) + temp.constant);
+
+            temp = temp.next;
+        }
+
+        return productMap;
     }
 
     public void setFractionConstant(int numerator, int denominator) {
@@ -85,8 +139,7 @@ class LinearSumNode {
     }
 
     public void setConstant(double con) {
-        // if(this.constant == 1.0) //TEMP FIX, dont need anymore?
-            this.constant = con;
+        this.constant = con;
     }
 
     public double getConstant() {

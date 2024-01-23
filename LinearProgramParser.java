@@ -91,7 +91,6 @@ public class LinearProgramParser {
         match(Token.SEMI);
     }
 
-    // Going to have to store this in a linked list somehow
     private void linear_sum() {
         lValues.currentLinearSum = new LinearSum();
         product();
@@ -106,7 +105,6 @@ public class LinearProgramParser {
         }
     }
 
-    // Going to have to store this
     private void product() {
         // x
         if(currentToken == Token.ID) {
@@ -196,7 +194,6 @@ public class LinearProgramParser {
 
     }
 
-    //Link together in a constraint class somehow?
     private void constr_list() {
         constr();
         while(currentToken == Token.ST) {
@@ -211,8 +208,8 @@ public class LinearProgramParser {
         linear_sum();
         lValues.currentConstraint.setLeftLinearSum(lValues.currentLinearSum);
 
-        match(Token.COMP);
         lValues.currentConstraint.setComparisonOp(lValues.cValue);
+        match(Token.COMP);
 
         linear_sum();
         lValues.currentConstraint.setRightLinearSum(lValues.currentLinearSum);

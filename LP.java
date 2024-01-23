@@ -19,6 +19,13 @@ public class LP {
         objectiveFunction = null;
 
         FileReader.fileReader = new FileReader(file);
+        simplifyLP();
+    }
+
+    public void simplifyLP() {
+        objectiveFunction.simplify();
+        for(Constraint c : constraints)
+            c.simplify();
     }
 
     public void setObjectiveFunction(LinearSum objectiveFunction) {
@@ -40,12 +47,13 @@ public class LP {
     }
 
     public void displayObjectiveFunction() {
-        System.out.println();
+        System.out.print("\nObjective Funciton: ");
         objectiveFunction.display();
+        System.out.println();
     }
 
     public void displayVariables() {
-        System.out.println();
+        System.out.print("\nVariables: ");
         for(int i = 0; i < variables.size(); i++) {
             System.out.print(variables.get(i));
             if(i != variables.size() - 1)
@@ -55,7 +63,7 @@ public class LP {
     }
 
     public void displayConstraints() {
-        System.out.println();
+        System.out.println("\nConstraints:");
         for(Constraint c : constraints) {
             c.display();
         }

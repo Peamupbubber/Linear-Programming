@@ -1,4 +1,7 @@
 import java.util.HashMap;
+import java.util.Map;
+
+import javax.swing.plaf.synth.SynthTextAreaUI;
 
 public class Constraint {
     private LinearSum left;
@@ -56,13 +59,42 @@ public class Constraint {
         }
     }
 
-    //Simplify the two sides of the equation
-    private void simplify() {
-        System.out.println("Simplifying constraint");
+    // Simplify the two sides of the equation
+    public void simplify() {
+        HashMap<String, Double> leftMap = left.buildMap();
+        HashMap<String, Double> rightMap = right.buildMap();
+
+        // Convert the two maps into one simplified map on the left
+        for(Map.Entry<String, Double> set : rightMap.entrySet()) {
+            if(leftMap.get(set.getKey()) == null) {
+                leftMap.put(set.getKey(), -1 * set.getValue());
+            }
+            else {
+                leftMap.put(set.getKey(), leftMap.get(set.getKey()) - set.getValue());
+            }
+        }
+
+        // Assign the right linear sum to the simplified constant
+        Double constant = leftMap.get("");
+        if(constant == null)
+            right = new LinearSum("", 0);
+        else
+            right = new LinearSum("", -1 * constant);
+
+        // Remove the constant from the left linear sum and assign the left linear sum
+        leftMap.remove("");
+        left = new LinearSum(leftMap);
+    }
+
+    // For debugging
+    private void printMap(HashMap<String, Double> map) {
+        System.out.println("---Printing constraint map---");
+        for(Map.Entry<String, Double> set : map.entrySet()) {
+            System.out.println(set.getKey() + ", " + set.getValue());
+        }
     }
 
     public void display() {
-        System.out.println();
         left.display();
         
         System.out.print(" " + comparisonOpNames.get(op) + " ");
