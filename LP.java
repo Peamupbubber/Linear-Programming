@@ -7,6 +7,7 @@ public class LP {
     private List<String> variables;
     private List<Constraint> constraints;
     private LinearSum objectiveFunction;
+    private boolean ofIsMin;
 
     public LP(String file) throws Exception {
         System.out.println("\nInit Linear Program");
@@ -17,12 +18,13 @@ public class LP {
         variables = new ArrayList<String>();
         constraints = new ArrayList<Constraint>();
         objectiveFunction = null;
+        ofIsMin = true;
 
         FileReader.fileReader = new FileReader(file);
         simplifyLP();
     }
 
-    public void simplifyLP() {
+    private void simplifyLP() {
         objectiveFunction.simplify();
         for(Constraint c : constraints)
             c.simplify();
@@ -32,12 +34,16 @@ public class LP {
         this.objectiveFunction = objectiveFunction;
     }
 
+    public void setOfIsMin(boolean ofIsMin) {
+        this.ofIsMin = ofIsMin;
+    }
+
     public void addVariable(String variable) {
-        variables.add(variable);
+        this.variables.add(variable);
     }
 
     public void addConstraint(Constraint constraint) {
-        constraints.add(constraint);
+        this.constraints.add(constraint);
     }
 
     public void display() {
@@ -47,7 +53,7 @@ public class LP {
     }
 
     public void displayObjectiveFunction() {
-        System.out.print("\nObjective Funciton: ");
+        System.out.print("\nObjective Funciton: " + (ofIsMin ? "Minimize " : "Maximize "));
         objectiveFunction.display();
         System.out.println();
     }

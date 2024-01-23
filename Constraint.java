@@ -1,8 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.plaf.synth.SynthTextAreaUI;
-
 public class Constraint {
     private LinearSum left;
     private LinearSum right;

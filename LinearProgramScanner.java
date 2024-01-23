@@ -100,18 +100,17 @@ public class LinearProgramScanner {
                 //check for res words, if not and invalid ERR
                 //Report the type of error and line number?
                 Token res = reservedWords.get(id.toLowerCase());
-                if(res != null)
-                    return res;
-                // else if(containsInvalidChar) {
-                //     System.out.println("\"" + id + "\"");
-                //     return Token.ERR;
+                LinearProgramParser.lpParser.lValues.sValue = id;
+                return res != null ? res : Token.ID;
+                // if(res != null)
+                //     return res;
+                // // else if(containsInvalidChar) {
+                // //     System.out.println("\"" + id + "\"");
+                // //     return Token.ERR;
+                // // }
+                // else {
+                //     return Token.ID;
                 // }
-                else {
-                    //The id is stored in lastString for use in the parser
-                    lastText = id;
-                    LinearProgramParser.lpParser.lValues.sValue = id;
-                    return Token.ID;
-                }
             }
 
             // CONST case

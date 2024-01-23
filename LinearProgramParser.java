@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.ArrayList;
+
 public class LinearProgramParser {
 
     public class LValues {
@@ -15,6 +18,8 @@ public class LinearProgramParser {
 
     public LValues lValues;
 
+    private List<String> minResWords;
+
     private Token currentToken;
     private boolean userProgramHasErrors;
 
@@ -24,8 +29,17 @@ public class LinearProgramParser {
         if(lpParser == null)
             lpParser = this;
 
+        initMinResWords();
+
         lValues = new LValues();
         userProgramHasErrors = false;
+    }
+
+    private void initMinResWords() {
+        minResWords = new ArrayList<String>();
+
+        minResWords.add("min");
+        minResWords.add("minimize");
     }
 
     // Matches the current token with the given token, and gets the next token from the scanner
@@ -68,10 +82,8 @@ public class LinearProgramParser {
     // Store variables in the LP
     private void var_list() {
         var();
-        LP.lp.addVariable(lValues.sValue);
         while(currentToken == Token.VAR) {
             var();
-            LP.lp.addVariable(lValues.sValue);
         }
     }
 
@@ -79,12 +91,14 @@ public class LinearProgramParser {
         match(Token.VAR);
         match(Token.COLON);
         match(Token.ID);
+        LP.lp.addVariable(lValues.sValue);
         //Non neg would be here
         match(Token.SEMI);
     }
 
     private void obj_fn() {
         match(Token.OPT);
+        LP.lp.setOfIsMin(minResWords.contains(lValues.sValue.toLowerCase()));
         match(Token.COLON);
         linear_sum();
         LP.lp.setObjectiveFunction(lValues.currentLinearSum);
