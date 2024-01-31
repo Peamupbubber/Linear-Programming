@@ -4,7 +4,7 @@ import java.util.Map;
 public class Constraint {
     private LinearSum left;
     private LinearSum right;
-    Comparison op;
+    private Comparison op;
 
     private HashMap<Comparison, String> comparisonOpNames;
 
