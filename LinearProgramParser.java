@@ -21,7 +21,7 @@ public class LinearProgramParser {
     private List<String> minResWords;
 
     private Token currentToken;
-    private boolean userProgramHasErrors;
+    public boolean userProgramHasErrors;
 
     public LinearProgramParser() {
         System.out.println("Init Linear Program Parser");

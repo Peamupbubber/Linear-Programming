@@ -24,7 +24,8 @@ public class Main {
             System.out.println("No file provided!");
         else {
             LP.lp =  new LP(args[0]);
-            LP.lp.display();
+            if(!LinearProgramParser.lpParser.userProgramHasErrors)
+                LP.lp.display();
         }
     }
 }
